@@ -40,7 +40,7 @@ def help(update, context):
     update.message.reply_text('Mövcud əmrlər:\n' +
                               '/basla - Yeni oyun başladmaq\n' +
                               '/master - Aparıcı olmaq\n' +
-                              '/sincab_rating - Qrup üzrə reytinq', reply_to_message_id=True)
+                              '/sincab_ad_rating - Qrup üzrə reytinq', reply_to_message_id=True)
 
 
 def button(update, context):
@@ -87,7 +87,7 @@ def command_start(update, context: CallbackContext):
         game = get_or_create_game(chat_id)
         game.start()
 
-        update.message.reply_text('Sincab oyuna hazırdır'.format(username), reply_to_message_id=True)
+        update.message.reply_text('Sincab adlandırmaq üçün hazırdır'.format(username), reply_to_message_id=True)
 
         set_master(update, context)
 
@@ -104,13 +104,13 @@ def set_master(update, context):
 
     game.set_master(update.message.from_user.id)
 
-    show_word_btn = InlineKeyboardButton("Sözə bax 🐿️", callback_data='show_word')
-    change_word_btn = InlineKeyboardButton("Sözü dəyiş ↺", callback_data='change_word')
+    show_word_btn = InlineKeyboardButton("Ada bax 🐿️", callback_data='show_word')
+    change_word_btn = InlineKeyboardButton("Adı dəyiş ↺", callback_data='change_word')
 
     keyboard = [[show_word_btn], [change_word_btn]]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.message.reply_text('[{}](tg://user?id={}) sözü başa salır'.format(username,user_id), reply_to_message_id=True, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
+    update.message.reply_text('[{}](tg://user?id={}) adı başa salır'.format(username,user_id), reply_to_message_id=True, reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
 
 
 def command_master(update: Update, context):
@@ -205,7 +205,7 @@ def is_word_answered(update, context):
     word = game.get_current_word()
 
     if game.is_word_answered(user_id, text):
-        update.message.reply_text('*{}* sözünü [{}](tg://user?id={}) tapdı'.format(word, username,user_id), reply_to_message_id=True, parse_mode=ParseMode.MARKDOWN)
+        update.message.reply_text('*{}* adını [{}](tg://user?id={}) tapdı'.format(word, username,user_id), reply_to_message_id=True, parse_mode=ParseMode.MARKDOWN)
 
         game.update_rating(user_id, username)
 
@@ -233,11 +233,11 @@ def main():
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler("basla", command_start))
+    dp.add_handler(CommandHandler("ad_basla", command_start))
     dp.add_handler(CommandHandler("master", command_master))
     dp.add_handler(CommandHandler("show_word", command_show_word))
     dp.add_handler(CommandHandler("change_word", command_change_word))
-    dp.add_handler(CommandHandler("sincab_rating", command_sincab_rating))
+    dp.add_handler(CommandHandler("sincab_ad_rating", command_sincab_rating))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("start", command_start))
 
